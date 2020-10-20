@@ -1,0 +1,46 @@
+﻿@inject HttpClient Http;
+
+<h3>Pierwszy</h3>
+
+<p>
+    To jest moj super komponent: @Name
+</p>
+<p>
+    <button class="btn btn-primary" @onclick="GuzikOnClick">Guzik</button>
+    <button class="btn btn-primary" @onclick="PobierzDaneOnClick">PobierzDane</button>
+</p>
+<p>
+    Dane z WebApi: @Dane
+</p>
+
+@code {
+
+    public string Name { get; set; } = "Heniek";
+
+    public string Dane { get; set; }
+
+    public void GuzikOnClick()
+    {
+        Name = DateTime.Now.ToString();
+    }
+
+    public async Task PobierzDaneOnClick()
+    {
+        //string url = "https://jsonplaceholder.typicode.com/todos/1";
+        string url = "https://localhost:44380/pierwszy/osoba";
+
+        var response = await Http.GetAsync(url);
+        var responseBody = await response.Content.ReadAsStringAsync();
+        Dane = responseBody;
+
+        //Root root = await Http.GetFromJsonAsync<Root>(url);
+    }
+
+    public class Root
+    {
+        public int userId { get; set; }
+        public int id { get; set; }
+        public string title { get; set; }
+        public bool completed { get; set; }
+    }
+}
